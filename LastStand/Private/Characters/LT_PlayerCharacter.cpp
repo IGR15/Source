@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "AbilitySystem/Abilities/LT_GamePlayAbility.h"
 #include "LastStand/Public/Player/LT_PlayerState.h"
 
 
@@ -39,6 +40,8 @@ ALT_PlayerCharacter::ALT_PlayerCharacter()
 	FollowCamera=CreateDefaultSubobject<UCameraComponent>("FollowCamera");
 	FollowCamera->SetupAttachment(CameraBoom,USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation=false;
+
+	ComboResetDelay=2.f;
 }
 
 
@@ -78,6 +81,26 @@ void ALT_PlayerCharacter::OnRep_PlayerState()
 
 	GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(),this);
 	OnASCInitialized.Broadcast(GetAbilitySystemComponent(),GetAttributeSet());
+}
+
+void ALT_PlayerCharacter::StartComboResetTimer()
+{
+ 
+	GetWorldTimerManager().ClearTimer(ComboResetTimerHandle);
+
+	UE_LOG(LogTemp, Warning, TEXT("Starting combo reset timer for %f seconds"), ComboResetDelay);
+	
+		GetWorldTimerManager().ClearTimer(ComboResetTimerHandle);
+
+		GetWorldTimerManager().SetTimer(
+			ComboResetTimerHandle,
+			this,
+			&ALT_PlayerCharacter::ResetComboIndex,
+			ComboResetDelay,
+			false);
+		OnComboReset.Broadcast();
+	
+	UE_LOG(LogTemp, Warning, TEXT("after combo reset timer for %f seconds"), ComboResetDelay);
 }
 
 /*void ALT_PlayerCharacter::ComboAttack()
@@ -142,5 +165,6 @@ void ALT_PlayerCharacter::ResetComboIndex()
 {
 	ComboIndex = 0;
 	bCanAttack = true;
+	UE_LOG(LogTemp, Log, TEXT("Combo index reset by ability delegate."));
 }
 

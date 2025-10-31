@@ -6,8 +6,11 @@
 #include "LT_BaseCharacter.h"
 #include "LT_PlayerCharacter.generated.h"
 
+class ULT_GamePlayAbility;
 class UCameraComponent;
 class USpringArmComponent;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnComboReset);
 
 UCLASS()
 class LASTSTAND_API ALT_PlayerCharacter : public ALT_BaseCharacter
@@ -21,7 +24,19 @@ class LASTSTAND_API ALT_PlayerCharacter : public ALT_BaseCharacter
 
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
+
 public:
+
+	UPROPERTY(EditDefaultsOnly, Category = "Combo")
+	float ComboResetDelay = 1.0f;
+	
+	UPROPERTY(BlueprintAssignable, Category = "Combo")
+	FOnComboReset OnComboReset;
+
+	UFUNCTION(BlueprintCallable, Category = "Combo")
+	void StartComboResetTimer();
+	
+	FTimerHandle ComboResetTimerHandle;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	TArray<UAnimMontage*> AttackMontages;
@@ -30,25 +45,20 @@ public:
 	int32 ComboIndex = 0;
 
 	UPROPERTY()
-	bool bCanAttack = true;
+	bool bCanAttack=true;
+	
 
 	/*UFUNCTION(BlueprintCallable, Category = "Combat")
 	void ComboAttack();
 	*/
-
-	
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
-	float ComboResetDelay = 1.2f;
-
 	
 	UFUNCTION(BlueprintCallable, Category = "Combat|Functions")
 	UAnimMontage* GetNextComboMontage(int32 Index)const;
 
-	UFUNCTION(BlueprintCallable, Category = "Combat|Functions")
+	UFUNCTION( Category = "Combat|Functions")
 	void ResetComboIndex();
 protected:
-	FTimerHandle ComboResetTimerHandle;
+	
 
 	
 private:

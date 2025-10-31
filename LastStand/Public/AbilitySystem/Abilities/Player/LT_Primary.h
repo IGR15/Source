@@ -19,6 +19,8 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category="GT|Abilities")
 	void SendHitReactEventToActors(const TArray<AActor*>& ActorsHit);
+
+	
 	
 	
 
