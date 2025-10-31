@@ -82,44 +82,6 @@ void ALT_PlayerCharacter::OnRep_PlayerState()
 	GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(),this);
 	OnASCInitialized.Broadcast(GetAbilitySystemComponent(),GetAttributeSet());
 }
-
-void ALT_PlayerCharacter::StartComboResetTimer()
-{
- 
-	GetWorldTimerManager().ClearTimer(ComboResetTimerHandle);
-
-	UE_LOG(LogTemp, Warning, TEXT("Starting combo reset timer for %f seconds"), ComboResetDelay);
-	
-		GetWorldTimerManager().ClearTimer(ComboResetTimerHandle);
-
-		GetWorldTimerManager().SetTimer(
-			ComboResetTimerHandle,
-			this,
-			&ALT_PlayerCharacter::ResetComboIndex,
-			ComboResetDelay,
-			false);
-		OnComboReset.Broadcast();
-	
-	UE_LOG(LogTemp, Warning, TEXT("after combo reset timer for %f seconds"), ComboResetDelay);
-}
-
-/*void ALT_PlayerCharacter::ComboAttack()
-{
-	if (!bCanAttack || AttackMontages.Num() == 0) return;
-	bCanAttack = false;
-
-	UAnimMontage* MontageToPlay = AttackMontages[ComboIndex];
-	if (!MontageToPlay) return;
-
-	float Duration = PlayAnimMontage(MontageToPlay);
-	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance())
-	{
-		AnimInstance->OnMontageEnded.AddDynamic(this, &ALT_PlayerCharacter::OnAttackMontageEnded);
-	}
-
-	ComboIndex = (ComboIndex + 1) % AttackMontages.Num();
-}*/
-
 UAnimMontage* ALT_PlayerCharacter::GetNextComboMontage(int32 Index)const
 {
 	if (AttackMontages.IsValidIndex(Index))
@@ -127,40 +89,7 @@ UAnimMontage* ALT_PlayerCharacter::GetNextComboMontage(int32 Index)const
 		return AttackMontages[Index];
 	}
 	return nullptr;
-	/*// Validation
-	if (AttackMontages.Num() == 0 || !bCanAttack)
-		return nullptr;
-
-	// Lock attacks
-	bCanAttack = false;
-
-	// Cancel previous reset timer
-	GetWorldTimerManager().ClearTimer(ComboResetTimerHandle);
-
-	// Select montage safely
-	UAnimMontage* SelectedMontage = AttackMontages.IsValidIndex(ComboIndex)
-		? AttackMontages[ComboIndex]
-		: nullptr;
-
-	if (!SelectedMontage)
-		return nullptr;
-
-	// Advance combo index
-	ComboIndex = (ComboIndex + 1) % AttackMontages.Num();
-
-	// Schedule automatic reset
-	GetWorldTimerManager().SetTimer(
-		ComboResetTimerHandle,
-		this,
-		&ALT_PlayerCharacter::ResetComboIndex,
-		ComboResetDelay,
-		false
-	);
-
-	// Return only the pointer — no playback
-	return SelectedMontage;*/
 }
-
 void ALT_PlayerCharacter::ResetComboIndex()
 {
 	ComboIndex = 0;

@@ -32,30 +32,22 @@ public:
 	
 	UPROPERTY(BlueprintAssignable, Category = "Combo")
 	FOnComboReset OnComboReset;
-
-	UFUNCTION(BlueprintCallable, Category = "Combo")
-	void StartComboResetTimer();
-	
-	FTimerHandle ComboResetTimerHandle;
-	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	TArray<UAnimMontage*> AttackMontages;
 
 	UPROPERTY()
 	int32 ComboIndex = 0;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool bCanAttack=true;
 	
 
-	/*UFUNCTION(BlueprintCallable, Category = "Combat")
-	void ComboAttack();
-	*/
+	
 	
 	UFUNCTION(BlueprintCallable, Category = "Combat|Functions")
 	UAnimMontage* GetNextComboMontage(int32 Index)const;
 
-	UFUNCTION( Category = "Combat|Functions")
+	UFUNCTION( BlueprintCallable,Category = "Combat|Functions")
 	void ResetComboIndex();
 protected:
 	
