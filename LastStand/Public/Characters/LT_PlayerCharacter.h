@@ -29,13 +29,16 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Combo")
 	float ComboResetDelay = 1.0f;
+	FTimerHandle ComboResetHandle;
+	UFUNCTION(BlueprintCallable)
+	void StartComboWindow(float Seconds = 2.f);
 	
 	UPROPERTY(BlueprintAssignable, Category = "Combo")
 	FOnComboReset OnComboReset;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	TArray<UAnimMontage*> AttackMontages;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	int32 ComboIndex = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
@@ -49,7 +52,8 @@ public:
 
 	UFUNCTION( BlueprintCallable,Category = "Combat|Functions")
 	void ResetComboIndex();
-protected:
+	void OnComboTimeout();
+
 	
 
 	

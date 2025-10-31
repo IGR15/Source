@@ -82,18 +82,42 @@ void ALT_PlayerCharacter::OnRep_PlayerState()
 	GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(),this);
 	OnASCInitialized.Broadcast(GetAbilitySystemComponent(),GetAttributeSet());
 }
-UAnimMontage* ALT_PlayerCharacter::GetNextComboMontage(int32 Index)const
+
+void ALT_PlayerCharacter::StartComboWindow(float Seconds)
+{
+	GetWorldTimerManager().ClearTimer(ComboResetHandle);
+	GetWorldTimerManager().SetTimer(
+		ComboResetHandle, this,
+		&ALT_PlayerCharacter::OnComboTimeout,
+		Seconds, false);
+}
+
+UAnimMontage* ALT_PlayerCharacter::GetNextComboMontage(int32 Index) const
 {
 	if (AttackMontages.IsValidIndex(Index))
 	{
-		return AttackMontages[Index];
+		if (UAnimMontage* M = AttackMontages[Index])
+		{
+			return M;
+		}
+		UE_LOG(LogTemp, Warning, TEXT("AttackMontages[%d] is null"), Index);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Index %d is out of bounds (Num=%d)"), Index, AttackMontages.Num());
 	}
 	return nullptr;
 }
+
 void ALT_PlayerCharacter::ResetComboIndex()
 {
 	ComboIndex = 0;
 	bCanAttack = true;
 	UE_LOG(LogTemp, Log, TEXT("Combo index reset by ability delegate."));
+}
+
+void ALT_PlayerCharacter::OnComboTimeout()
+{
+	ResetComboIndex();
 }
 
