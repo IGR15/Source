@@ -27,6 +27,7 @@ void ULT_AbilitySystemComponent::OnRep_ActivateAbilities()
 {
 	Super::OnRep_ActivateAbilities();
 
+	//this is to prevent from activation any ability that has been removed 
 	FScopedAbilityListLock ActiveScopeLock(*this);
 	for (const FGameplayAbilitySpec& AbilitySpec:GetActivatableAbilities())
 	{

@@ -92,12 +92,32 @@ void ALT_PlayerCharacter::StartComboWindow(float Seconds)
 		Seconds, false);
 }
 
-UAnimMontage* ALT_PlayerCharacter::GetNextComboMontage(int32 Index) const
+UAnimMontage* ALT_PlayerCharacter::GetNextComboMontage() 
 {
+	
+
+	if (AttackMontages.Num() == 0) return nullptr;
+
+	// wrap if we’re past the end
+	ComboIndex = ComboIndex % AttackMontages.Num();
+
+	if (!AttackMontages.IsValidIndex(ComboIndex)) return nullptr;
+
+	UAnimMontage* M = AttackMontages[ComboIndex];
+
+	// prep next call
+	ComboIndex = (ComboIndex + 1) % AttackMontages.Num();
+	return M;
+
+	/*if (ComboIndex>=AttackMontages.Num())
+	{
+		ResetComboIndex();
+	}
 	if (AttackMontages.IsValidIndex(Index))
 	{
 		if (UAnimMontage* M = AttackMontages[Index])
 		{
+			ComboIndex++;
 			return M;
 		}
 		UE_LOG(LogTemp, Warning, TEXT("AttackMontages[%d] is null"), Index);
@@ -106,8 +126,10 @@ UAnimMontage* ALT_PlayerCharacter::GetNextComboMontage(int32 Index) const
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Index %d is out of bounds (Num=%d)"), Index, AttackMontages.Num());
 	}
-	return nullptr;
+	return nullptr;*/
 }
+
+
 
 void ALT_PlayerCharacter::ResetComboIndex()
 {

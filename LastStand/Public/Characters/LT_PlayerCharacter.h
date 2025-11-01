@@ -48,8 +48,8 @@ public:
 	
 	
 	UFUNCTION(BlueprintCallable, Category = "Combat|Functions")
-	UAnimMontage* GetNextComboMontage(int32 Index)const;
-
+	UAnimMontage* GetNextComboMontage();
+	
 	UFUNCTION( BlueprintCallable,Category = "Combat|Functions")
 	void ResetComboIndex();
 	void OnComboTimeout();
