@@ -11,10 +11,7 @@ void ULT_GamePlayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	if (bDrawDebugs && IsValid(GEngine))
-	{
-		GEngine->AddOnScreenDebugMessage(-1,3.f,FColor::Cyan,FString::Printf(TEXT("%s Activated"),*GetName()));
-	}
+	
 }
 
 
