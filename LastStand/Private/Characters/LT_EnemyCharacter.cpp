@@ -41,6 +41,10 @@ void ALT_EnemyCharacter::BeginPlay()
 
 	GiveStartUpAbilities();
 	InitializeAttributes();
+
+	ULT_AttributeSet* LT_AttributeSet=Cast<ULT_AttributeSet>(GetAttributeSet());
+	if (!IsValid(LT_AttributeSet))return;
+	GetAbilitySystemComponent()->GetGameplayAttributeValueChangeDelegate(LT_AttributeSet->GetHealthAttribute()).AddUObject(this,&ThisClass::OnHealthChanged);
 	
 }
 

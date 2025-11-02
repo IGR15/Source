@@ -7,7 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "AbilitySystem/Abilities/LT_GamePlayAbility.h"
+#include "AbilitySystem/LT_AttributeSet.h"
 #include "LastStand/Public/Player/LT_PlayerState.h"
 
 
@@ -71,6 +71,10 @@ void ALT_PlayerCharacter::PossessedBy(AController* NewController)
 	OnASCInitialized.Broadcast(GetAbilitySystemComponent(),GetAttributeSet());
 	GiveStartUpAbilities();
 	InitializeAttributes();
+
+	ULT_AttributeSet* LT_AttributeSet=Cast<ULT_AttributeSet>(GetAttributeSet());
+	if (!IsValid(LT_AttributeSet))return;
+	GetAbilitySystemComponent()->GetGameplayAttributeValueChangeDelegate(LT_AttributeSet->GetHealthAttribute()).AddUObject(this,&ThisClass::OnHealthChanged);
 }
 
 void ALT_PlayerCharacter::OnRep_PlayerState()
@@ -81,6 +85,10 @@ void ALT_PlayerCharacter::OnRep_PlayerState()
 
 	GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(),this);
 	OnASCInitialized.Broadcast(GetAbilitySystemComponent(),GetAttributeSet());
+
+	ULT_AttributeSet* LT_AttributeSet=Cast<ULT_AttributeSet>(GetAttributeSet());
+	if (!IsValid(LT_AttributeSet))return;
+	GetAbilitySystemComponent()->GetGameplayAttributeValueChangeDelegate(LT_AttributeSet->GetHealthAttribute()).AddUObject(this,&ThisClass::OnHealthChanged);
 }
 
 void ALT_PlayerCharacter::StartComboWindow(float Seconds)
