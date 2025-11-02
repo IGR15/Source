@@ -12,7 +12,8 @@ void ULT_AttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty
 	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass,Mana,COND_None,REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass,MaxMana,COND_None,REPNOTIFY_Always);
 	
-	DOREPLIFETIME(ThisClass,bAttributeInitialized);
+	//DOREPLIFETIME(ThisClass,bAttributeInitialized);
+	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass, bAttributeInitialized, COND_None, REPNOTIFY_Always);
 }
 
 void ULT_AttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data)

@@ -29,7 +29,7 @@ void ALT_PlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&ALT_PlayerController::Move);
 	EnhancedInputComponent->BindAction(LookAction,ETriggerEvent::Triggered,this,&ALT_PlayerController::Look);
 	
-	EnhancedInputComponent->BindAction(PrimaryAction,ETriggerEvent::Started,this,&ALT_PlayerController::Primary);
+	EnhancedInputComponent->BindAction(PrimaryAction,ETriggerEvent::Triggered,this,&ALT_PlayerController::Primary);
 	EnhancedInputComponent->BindAction(SecondaryAction,ETriggerEvent::Started,this,&ALT_PlayerController::Secondary);
 	EnhancedInputComponent->BindAction(TertiaryAction,ETriggerEvent::Started,this,&ALT_PlayerController::Tertiary);
 }
