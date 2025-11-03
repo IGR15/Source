@@ -13,5 +13,3 @@ void ULT_GamePlayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 
 	
 }
-
-

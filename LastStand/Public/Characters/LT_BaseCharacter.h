@@ -36,6 +36,10 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category="Death")
 	virtual void HandleRespawn();
+
+	UFUNCTION(BlueprintCallable)
+	void ResetAttributes();
+	
 protected:
 	void GiveStartUpAbilities();
 	void InitializeAttributes();
@@ -49,6 +53,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly,Category="GT|Effects")
 	TSubclassOf<UGameplayEffect>InitializeAttributeEffect;
+
+	UPROPERTY(EditDefaultsOnly,Category="GT|Effects")
+	TSubclassOf<UGameplayEffect>ResetAttributesEffect;
 
 	UPROPERTY(BlueprintReadOnly,meta=(AllowPrivateAccess="true"),Replicated)
 	bool bAlive=true;

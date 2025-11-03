@@ -25,6 +25,18 @@ UAbilitySystemComponent* ALT_BaseCharacter::GetAbilitySystemComponent() const
 	return nullptr;
 }
 
+void ALT_BaseCharacter::ResetAttributes()
+{
+	checkf(IsValid(ResetAttributesEffect),TEXT("InitializeAttributeEffect Not Set."));
+
+	if (HasAuthority())
+	{
+		FGameplayEffectContextHandle Handle= GetAbilitySystemComponent()->MakeEffectContext();
+		FGameplayEffectSpecHandle SpecHandle= GetAbilitySystemComponent()->MakeOutgoingSpec(ResetAttributesEffect,1.f,Handle);
+		GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+	}
+}
+
 void ALT_BaseCharacter::GiveStartUpAbilities()
 {
 	if (!IsValid(GetAbilitySystemComponent()))return;
