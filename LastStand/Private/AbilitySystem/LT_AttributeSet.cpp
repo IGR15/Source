@@ -2,9 +2,12 @@
 
 
 #include "LastStand/Public/AbilitySystem/LT_AttributeSet.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "GameplayEffectExtension.h"
+#include "LTGamePlayTags/LTTags.h"
 #include "Net/UnrealNetwork.h"
 
-void ULT_AttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+void ULT_AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass,Health,COND_None,REPNOTIFY_Always);
@@ -16,9 +19,19 @@ void ULT_AttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty
 	DOREPLIFETIME_CONDITION_NOTIFY(ThisClass, bAttributeInitialized, COND_None, REPNOTIFY_Always);
 }
 
-void ULT_AttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data)
+void ULT_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
+
+	if (Data.EvaluatedData.Attribute==GetHealthAttribute())
+	{
+		FGameplayEventData Payload;
+		Payload.Instigator=Data.Target.GetAvatarActor();
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+			Data.EffectSpec.GetEffectContext().GetInstigator(),
+			LTTags::Events::KillScored,
+			Payload);
+	}
 
 	if (!bAttributeInitialized)
 	{

@@ -12,6 +12,7 @@ namespace LTTags
 
 	namespace Events
 	{
+		UE_DEFINE_GAMEPLAY_TAG_COMMENT(KillScored,"LTTags.Events.KillScored","Tag For The  Kill scored event")
 		namespace Enemy
 		{
 			UE_DEFINE_GAMEPLAY_TAG_COMMENT(HitReact,"LTTags.Events.Enemy.HitReact","Tag For The  Hit React")
