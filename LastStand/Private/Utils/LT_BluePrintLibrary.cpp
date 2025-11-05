@@ -55,7 +55,7 @@ FClosestActorWithTagResult ULT_BluePrintLibrary::FindClosestActorWithTag(const U
 		if (!IsValid(BaseCharacter)|| !BaseCharacter->IsAlive())continue;
 
 		const float Distance=FVector::Dist(Origin,Actor->GetActorLocation());
-		if (Distance>ClosestDistance)
+		if (Distance<ClosestDistance)
 		{
 			ClosestDistance=Distance;
 			ClosestActor=Actor;

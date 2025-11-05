@@ -3,6 +3,7 @@
 
 #include "LastStand/Public/Characters/LT_EnemyCharacter.h"
 
+#include "AIController.h"
 #include "LastStand/Public/AbilitySystem/LT_AbilitySystemComponent.h"
 #include "LastStand/Public/AbilitySystem/LT_AttributeSet.h"
 
@@ -26,6 +27,15 @@ UAbilitySystemComponent* ALT_EnemyCharacter::GetAbilitySystemComponent() const
 UAttributeSet* ALT_EnemyCharacter::GetAttributeSet() const
 {
 	return AttributeSet;
+}
+
+void ALT_EnemyCharacter::HandleDeath()
+{
+	Super::HandleDeath();
+
+	AAIController* AiController =GetController<AAIController>();
+	if (!IsValid(AiController))return;
+	AiController->StopMovement();
 }
 
 // Called when the game starts or when spawned
