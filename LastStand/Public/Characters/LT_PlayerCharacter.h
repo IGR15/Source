@@ -10,7 +10,6 @@ class ULT_GamePlayAbility;
 class UCameraComponent;
 class USpringArmComponent;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnComboReset);
 
 UCLASS()
 class LASTSTAND_API ALT_PlayerCharacter : public ALT_BaseCharacter
@@ -33,8 +32,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StartComboWindow(float Seconds = 2.f);
 	
-	UPROPERTY(BlueprintAssignable, Category = "Combo")
-	FOnComboReset OnComboReset;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	TArray<UAnimMontage*> AttackMontages;
 
