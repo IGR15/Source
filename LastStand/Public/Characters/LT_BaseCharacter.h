@@ -9,6 +9,11 @@
 #include "LT_BaseCharacter.generated.h"
 
 
+namespace LaststandTags
+{
+	extern LASTSTAND_API const FName Player; 
+}
+
 class UAttributeSet;
 class UGameplayEffect;
 class UGameplayAbility;

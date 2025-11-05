@@ -42,6 +42,7 @@ ALT_PlayerCharacter::ALT_PlayerCharacter()
 	FollowCamera->bUsePawnControlRotation=false;
 
 	ComboResetDelay=2.f;
+	Tags.Add(LaststandTags::Player);
 }
 
 

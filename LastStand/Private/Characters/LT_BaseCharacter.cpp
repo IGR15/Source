@@ -6,6 +6,10 @@
 #include "Net/UnrealNetwork.h"
 
 
+namespace  LaststandTags
+{
+	const FName Player=FName("Player");
+}
 // Sets default values
 ALT_BaseCharacter::ALT_BaseCharacter()
 {
