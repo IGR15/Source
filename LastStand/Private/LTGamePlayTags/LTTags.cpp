@@ -2,6 +2,11 @@
 
 namespace LTTags
 {
+	namespace SetByCaller
+	{
+		UE_DEFINE_GAMEPLAY_TAG_COMMENT(Projectile,"LTTags.SetByCaller.Projectile","Tag For set by caller magnitude class")
+
+	}
 	namespace LTAbilities
 	{
 		UE_DEFINE_GAMEPLAY_TAG_COMMENT(Primary,"LTTags.LTAbilities.Primary","Tag For The Primary Ability")

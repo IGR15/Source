@@ -3,9 +3,11 @@
 
 #include "GameObjects/LT_Projectile.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "Characters/LT_PlayerCharacter.h"
 #include "AbilitySystemComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "LTGamePlayTags/LTTags.h"
 
 
 ALT_Projectile::ALT_Projectile()
@@ -29,6 +31,8 @@ void ALT_Projectile::NotifyActorBeginOverlap(AActor* OtherActor)
 
 	FGameplayEffectContextHandle ContextHandle= AbilitySystemComponent->MakeEffectContext();
 	FGameplayEffectSpecHandle SpecHandle=AbilitySystemComponent->MakeOutgoingSpec(DamageEffect,1.f,ContextHandle);
+
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,LTTags::SetByCaller::Projectile,Damage);
 	
 	AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
 	SpawnImpactEffects();
