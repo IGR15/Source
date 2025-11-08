@@ -21,7 +21,8 @@ void ALT_Projectile::NotifyActorBeginOverlap(AActor* OtherActor)
 	Super::NotifyActorBeginOverlap(OtherActor);
 
 	ALT_PlayerCharacter* PlayerCharacter=Cast<ALT_PlayerCharacter>(OtherActor);
-	if (!IsValid(PlayerCharacter)&& !PlayerCharacter->IsAlive())return;
+	if (!IsValid(PlayerCharacter))return;
+	if (!PlayerCharacter->IsAlive())return;
 
 	UAbilitySystemComponent* AbilitySystemComponent=PlayerCharacter->GetAbilitySystemComponent();
 	if (!IsValid(AbilitySystemComponent)||!HasAuthority())return;
