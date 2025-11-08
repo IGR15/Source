@@ -3,24 +3,35 @@
 
 #include "GameObjects/LT_Projectile.h"
 
+#include "Characters/LT_PlayerCharacter.h"
+#include "AbilitySystemComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
-// Sets default values
+
 ALT_Projectile::ALT_Projectile()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
+	ProjectileMovement=CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovementComponent");
+
+	bReplicates=true;
 }
 
-// Called when the game starts or when spawned
-void ALT_Projectile::BeginPlay()
+void ALT_Projectile::NotifyActorBeginOverlap(AActor* OtherActor)
 {
-	Super::BeginPlay();
+	Super::NotifyActorBeginOverlap(OtherActor);
+
+	ALT_PlayerCharacter* PlayerCharacter=Cast<ALT_PlayerCharacter>(OtherActor);
+	if (!IsValid(PlayerCharacter)&& !PlayerCharacter->IsAlive())return;
+
+	UAbilitySystemComponent* AbilitySystemComponent=PlayerCharacter->GetAbilitySystemComponent();
+	if (!IsValid(AbilitySystemComponent)||!HasAuthority())return;
+
+	FGameplayEffectContextHandle ContextHandle= AbilitySystemComponent->MakeEffectContext();
+	FGameplayEffectSpecHandle SpecHandle=AbilitySystemComponent->MakeOutgoingSpec(DamageEffect,1.f,ContextHandle);
 	
+	AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+	SpawnImpactEffects();
+	Destroy();
 }
 
-// Called every frame
-void ALT_Projectile::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
 

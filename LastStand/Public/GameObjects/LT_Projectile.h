@@ -6,20 +6,28 @@
 #include "GameFramework/Actor.h"
 #include "LT_Projectile.generated.h"
 
+class UGameplayEffect;
+class UProjectileMovementComponent;
+
 UCLASS()
 class LASTSTAND_API ALT_Projectile : public AActor
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	ALT_Projectile();
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="GT|Damage",meta=(ExposeOnSpawn,ClampMin="0.0"))
+	float Damage{10.f};
+	UFUNCTION(BlueprintImplementableEvent,Category="GT|Projectile")
+	void SpawnImpactEffects();
+	
+private:
 
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(VisibleAnywhere,Category="GT|Projectile")
+	TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
+
+	UPROPERTY(EditDefaultsOnly,Category="GT|Effects")
+	TSubclassOf<UGameplayEffect>DamageEffect;
 };

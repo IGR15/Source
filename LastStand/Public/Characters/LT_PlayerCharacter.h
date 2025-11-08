@@ -15,7 +15,7 @@ UCLASS()
 class LASTSTAND_API ALT_PlayerCharacter : public ALT_BaseCharacter
 {
 	GENERATED_BODY()
-	
+public:	
 	ALT_PlayerCharacter();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
@@ -24,7 +24,7 @@ class LASTSTAND_API ALT_PlayerCharacter : public ALT_BaseCharacter
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
 
-public:
+
 
 	UPROPERTY(EditDefaultsOnly, Category = "Combo")
 	float ComboResetDelay = 1.0f;
