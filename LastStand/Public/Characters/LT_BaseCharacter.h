@@ -44,6 +44,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ResetAttributes();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void RotateToTarget(AActor* RotateTarget);
 	
 protected:
 	void GiveStartUpAbilities();

@@ -24,7 +24,10 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Ai")
 	float AcceptenceRaidus{500.f};
 
-
+	UFUNCTION(BlueprintImplementableEvent)
+	float GetTimeLineLength();
+	
+	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Ai")
 	float MinAttackDelay{.1f};
 
