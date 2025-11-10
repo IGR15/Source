@@ -29,5 +29,10 @@ namespace LTTags
 			UE_DEFINE_GAMEPLAY_TAG_COMMENT(EndAttack,"LTTags.Events.Enemy.EndAttack","Tag For Ending Attack")
 			UE_DEFINE_GAMEPLAY_TAG_COMMENT(MeleeTraceHit,"LTTags.Events.Enemy.MeleeTraceHit","Tag For Ending Attack trace")
 		}
+		namespace Player
+		{
+			UE_DEFINE_GAMEPLAY_TAG_COMMENT(HitReact,"LTTags.Events.Player.HitReact","Tag For The  Hit React")
+			UE_DEFINE_GAMEPLAY_TAG_COMMENT(Death,"LTTags.Events.Player.Death","Tag For The  Death")
+		}
 	}
 }

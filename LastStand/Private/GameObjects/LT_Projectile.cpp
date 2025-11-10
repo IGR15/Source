@@ -8,6 +8,7 @@
 #include "AbilitySystemComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "LTGamePlayTags/LTTags.h"
+#include "Utils/LT_BluePrintLibrary.h"
 
 
 ALT_Projectile::ALT_Projectile()
@@ -29,12 +30,17 @@ void ALT_Projectile::NotifyActorBeginOverlap(AActor* OtherActor)
 	UAbilitySystemComponent* AbilitySystemComponent=PlayerCharacter->GetAbilitySystemComponent();
 	if (!IsValid(AbilitySystemComponent)||!HasAuthority())return;
 
-	FGameplayEffectContextHandle ContextHandle= AbilitySystemComponent->MakeEffectContext();
-	FGameplayEffectSpecHandle SpecHandle=AbilitySystemComponent->MakeOutgoingSpec(DamageEffect,1.f,ContextHandle);
+	FGameplayEventData Payload;
+	Payload.Instigator=GetOwner();
+	Payload.Target=PlayerCharacter;
 
-	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,LTTags::SetByCaller::Projectile,Damage);
+	ULT_BluePrintLibrary::SendDamageEventToPlayer(PlayerCharacter,DamageEffect,Payload,LTTags::SetByCaller::Projectile,Damage);
 	
-	AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+	/*FGameplayEffectContextHandle ContextHandle= AbilitySystemComponent->MakeEffectContext();
+	FGameplayEffectSpecHandle SpecHandle=AbilitySystemComponent->MakeOutgoingSpec(DamageEffect,1.f,ContextHandle);
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,LTTags::SetByCaller::Projectile,Damage);
+	AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());*/
+	
 	SpawnImpactEffects();
 	Destroy();
 }

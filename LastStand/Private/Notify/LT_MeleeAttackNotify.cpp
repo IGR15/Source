@@ -18,6 +18,7 @@ void ULT_MeleeAttackNotify::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSe
 	if (!IsValid(MeshComp->GetOwner()))return;
 
 	TArray<FHitResult>Hits=PerformSphereTrace(MeshComp);
+	SendEventToActors(MeshComp,Hits);
 	
 }
 
