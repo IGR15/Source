@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "Characters/LT_BaseCharacter.h"
 #include "LTGamePlayTags/LTTags.h"
 
 
@@ -37,6 +38,7 @@ void ALT_PlayerController::SetupInputComponent()
 void ALT_PlayerController::Jump()
 {
 	if (!IsValid(GetCharacter()))return;
+	if (!IsAlive())return;
 
 	GetCharacter()->Jump();
 }
@@ -44,6 +46,7 @@ void ALT_PlayerController::Jump()
 void ALT_PlayerController::StopJumping()
 {
 	if (!IsValid(GetCharacter()))return;
+	if (!IsAlive())return;
 
 	GetCharacter()->StopJumping();
 }
@@ -51,6 +54,7 @@ void ALT_PlayerController::StopJumping()
 void ALT_PlayerController::Move(const FInputActionValue& Value)
 {
 	if (!IsValid(GetPawn()))return;
+	if (!IsAlive())return;
 
 	const FVector2D MovementVector=Value.Get<FVector2D>();
 
@@ -65,6 +69,7 @@ void ALT_PlayerController::Move(const FInputActionValue& Value)
 
 void ALT_PlayerController::Look(const FInputActionValue& Value)
 {
+	if (!IsAlive())return;
 	const FVector2D LookAxisVector=Value.Get<FVector2D>();
 
 	AddYawInput(LookAxisVector.X);
@@ -88,7 +93,15 @@ void ALT_PlayerController::Tertiary()
 
 void ALT_PlayerController::ActivateAbility(const FGameplayTag& AbilityTag) const
 {
+	if (!IsAlive())return;
 	UAbilitySystemComponent* ASC= UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn());
 	if (!IsValid(ASC))return;
 	ASC->TryActivateAbilitiesByTag(AbilityTag.GetSingleTagContainer());
+}
+
+bool ALT_PlayerController::IsAlive()const
+{
+	ALT_BaseCharacter* BaseCharacter=Cast<ALT_BaseCharacter>(GetPawn());
+	if (!IsValid(BaseCharacter))return false;
+	return BaseCharacter->IsAlive();
 }
