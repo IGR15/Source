@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "LT_BluePrintLibrary.generated.h"
 
+class UGameplayEffect;
 /**
  * 
  */
