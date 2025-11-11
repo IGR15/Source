@@ -71,7 +71,7 @@ FClosestActorWithTagResult ULT_BluePrintLibrary::FindClosestActorWithTag(const U
 }
 
 void ULT_BluePrintLibrary::SendDamageEventToPlayer(AActor* Target, const TSubclassOf<UGameplayEffect>& DamageEffect,
-	const FGameplayEventData& Payload, const FGameplayTag& DataTag, float Damage)
+	FGameplayEventData& Payload, const FGameplayTag& DataTag, float Damage,UObject* OptionalParticleSystem)
 {
 	ALT_BaseCharacter* PlayerCharacter=Cast<ALT_BaseCharacter>(Target);
 	if (!IsValid(PlayerCharacter)|| !PlayerCharacter->IsAlive())return;
@@ -82,6 +82,8 @@ void ULT_BluePrintLibrary::SendDamageEventToPlayer(AActor* Target, const TSubcla
 	const bool bLethal=AttributeSet->GetHealth()-Damage<=0.f;
 	const FGameplayTag EventTag=bLethal ? LTTags::Events::Player::Death:LTTags::Events::Player::HitReact;
 
+	Payload.OptionalObject=OptionalParticleSystem;
+	
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(PlayerCharacter,EventTag,Payload);
 
 	UAbilitySystemComponent* TargetASC=PlayerCharacter->GetAbilitySystemComponent();

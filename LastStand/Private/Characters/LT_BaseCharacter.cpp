@@ -32,6 +32,7 @@ UAbilitySystemComponent* ALT_BaseCharacter::GetAbilitySystemComponent() const
 void ALT_BaseCharacter::ResetAttributes()
 {
 	checkf(IsValid(ResetAttributesEffect),TEXT("InitializeAttributeEffect Not Set."));
+	if (!IsValid(GetAbilitySystemComponent()))return;
 
 	if (HasAuthority())
 	{
