@@ -30,8 +30,6 @@ TArray<FHitResult> ULT_MeleeAttackNotify::PerformSphereTrace(USkeletalMeshCompon
 	const FVector Start=SocketTransform.GetLocation();
 	const FVector ExtendedSocketDirection=UKismetMathLibrary::GetForwardVector(SocketTransform.GetRotation().Rotator())*SocketExtensionOffset;
 	const FVector End=Start-ExtendedSocketDirection;
-	/*TArray<AActor*>ActorsToIgnore;
-	ActorsToIgnore.Add(MeshComp->GetOwner());*/
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(MeshComp->GetOwner());
 
