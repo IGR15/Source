@@ -201,7 +201,7 @@ TArray<AActor*> ULT_BluePrintLibrary::ApplyKnockback(AActor* AvatarActor, const 
 		KnockbackForce.Z=0.f;
 		
 		const FVector Right=KnockbackForce.RotateAngleAxis(90.f,FVector::UpVector);
-		KnockbackForce=KnockbackForce.RotateAngleAxis(-RotationAngle,Right);
+		KnockbackForce=KnockbackForce.RotateAngleAxis(-RotationAngle,Right)*LaunchForce;
 		if (bDrawDebugs)
 		{
 			UWorld* World = GEngine->GetWorldFromContextObject(AvatarActor, EGetWorldErrorMode::LogAndReturnNull);
