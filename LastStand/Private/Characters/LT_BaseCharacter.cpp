@@ -22,6 +22,7 @@ void ALT_BaseCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimePropert
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ThisClass,bAlive);
+	DOREPLIFETIME(ThisClass,bIsBeingLaunched);
 }
 
 UAbilitySystemComponent* ALT_BaseCharacter::GetAbilitySystemComponent() const
@@ -40,6 +41,10 @@ void ALT_BaseCharacter::ResetAttributes()
 		FGameplayEffectSpecHandle SpecHandle= GetAbilitySystemComponent()->MakeOutgoingSpec(ResetAttributesEffect,1.f,Handle);
 		GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
 	}
+}
+
+void ALT_BaseCharacter::StopMovementUntilLanded()
+{
 }
 
 void ALT_BaseCharacter::GiveStartUpAbilities()

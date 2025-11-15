@@ -3,9 +3,11 @@
 
 #include "LastStand/Public/Characters/LT_EnemyCharacter.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AIController.h"
 #include "LastStand/Public/AbilitySystem/LT_AbilitySystemComponent.h"
 #include "LastStand/Public/AbilitySystem/LT_AttributeSet.h"
+#include "LTGamePlayTags/LTTags.h"
 
 
 // Sets default values
@@ -38,6 +40,27 @@ void ALT_EnemyCharacter::HandleDeath()
 	AiController->StopMovement();
 }
 
+void ALT_EnemyCharacter::StopMovementUntilLanded()
+{
+	Super::StopMovementUntilLanded();
+	
+	bIsBeingLaunched=true;
+	
+	AAIController* AiController =GetController<AAIController>();
+	if (!IsValid(AiController))return;
+	AiController->StopMovement();
+	if (!LandedDelegate.IsAlreadyBound(this,&ThisClass::EnableMovementOnLanded))
+	{
+		LandedDelegate.AddDynamic(this,&ThisClass::EnableMovementOnLanded);
+	}
+}
+void ALT_EnemyCharacter::EnableMovementOnLanded(const FHitResult& Hit)
+{
+	bIsBeingLaunched=false;
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this,LTTags::Events::Enemy::EndAttack,FGameplayEventData());
+	LandedDelegate.RemoveAll(this);
+}
+
 // Called when the game starts or when spawned
 void ALT_EnemyCharacter::BeginPlay()
 {
@@ -57,5 +80,6 @@ void ALT_EnemyCharacter::BeginPlay()
 	GetAbilitySystemComponent()->GetGameplayAttributeValueChangeDelegate(LT_AttributeSet->GetHealthAttribute()).AddUObject(this,&ThisClass::OnHealthChanged);
 	
 }
+
 
 

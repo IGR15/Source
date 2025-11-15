@@ -52,7 +52,10 @@ void ULT_SearchForTarget::StartSearch()
 }
 inline void ULT_SearchForTarget::EndAttackEventReceived(FGameplayEventData Payload)
 {
-	StartSearch();
+	if (OwningEnemy.IsValid()&&!OwningEnemy->bIsBeingLaunched)
+	{
+		StartSearch();
+	}
 }
 
 void ULT_SearchForTarget::Search()

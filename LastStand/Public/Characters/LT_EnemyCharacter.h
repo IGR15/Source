@@ -35,12 +35,18 @@ public:
 	float MaxAttackDelay{.5f};
 
 	virtual void HandleDeath() override;
+	
+	virtual void StopMovementUntilLanded() override;
 
 protected:
 	virtual void BeginPlay() override;
 
 
 private:
+	
+	UFUNCTION()
+	void EnableMovementOnLanded(const FHitResult& Hit);
+	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 

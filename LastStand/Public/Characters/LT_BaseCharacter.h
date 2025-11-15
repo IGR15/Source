@@ -47,6 +47,11 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void RotateToTarget(AActor* RotateTarget);
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Replicated)
+	bool bIsBeingLaunched=false;
+	
+	virtual  void StopMovementUntilLanded();
 	
 protected:
 	void GiveStartUpAbilities();

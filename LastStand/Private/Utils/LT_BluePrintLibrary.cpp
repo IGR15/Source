@@ -209,7 +209,6 @@ TArray<AActor*> ULT_BluePrintLibrary::ApplyKnockback(AActor* AvatarActor, const 
 		}
 		
 		HitCharacter->LaunchCharacter(KnockbackForce,true,true);
-		
 	}
 	return HitActors;
 }
