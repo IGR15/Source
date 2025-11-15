@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Chaos/Deformable/ChaosDeformableSolverProxy.h"
 #include "Characters/LT_BaseCharacter.h"
+#include "Characters/LT_EnemyCharacter.h"
 #include "Engine/OverlapResult.h"
 #include "Kismet/GameplayStatics.h"
 #include "LTGamePlayTags/LTTags.h"
@@ -207,7 +208,10 @@ TArray<AActor*> ULT_BluePrintLibrary::ApplyKnockback(AActor* AvatarActor, const 
 			UWorld* World = GEngine->GetWorldFromContextObject(AvatarActor, EGetWorldErrorMode::LogAndReturnNull);
 			DrawDebugDirectionalArrow(World,HitCharacterLocation,HitCharacterLocation+KnockbackForce,100.f,FColor::Green,false,3.f);
 		}
-		
+		if (ALT_EnemyCharacter* EnemyCharacter=Cast<ALT_EnemyCharacter>(HitCharacter); IsValid(EnemyCharacter) )
+		{
+			EnemyCharacter->StopMovementUntilLanded();
+		}
 		HitCharacter->LaunchCharacter(KnockbackForce,true,true);
 	}
 	return HitActors;
