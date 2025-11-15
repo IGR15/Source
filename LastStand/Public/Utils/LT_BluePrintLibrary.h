@@ -54,4 +54,6 @@ public:
 	static void DrawHitBoxOverlapDebugs(const UObject* WorldContextObject,const TArray<FOverlapResult>& OverlapResults,const FVector& HitBoxLocation,float HitBoxRadius);
 
 
+	UFUNCTION(blueprintCallable,Category="GT|Abilities")
+	static TArray<AActor*> ApplyKnockback(AActor* AvatarActor,const TArray<AActor*>& HitActors,float InnerRadius,float OuterRadius,float LaunchForceMagnitude,float RotationAngle=45.f,bool bDrawDebugs=false);
 };

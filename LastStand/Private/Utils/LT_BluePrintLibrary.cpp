@@ -4,6 +4,7 @@
 #include "Utils/LT_BluePrintLibrary.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "Chaos/Deformable/ChaosDeformableSolverProxy.h"
 #include "Characters/LT_BaseCharacter.h"
 #include "Engine/OverlapResult.h"
 #include "Kismet/GameplayStatics.h"
@@ -167,4 +168,48 @@ void ULT_BluePrintLibrary::DrawHitBoxOverlapDebugs(const UObject* WorldContextOb
 
 		}
 	}
+}
+
+TArray<AActor*> ULT_BluePrintLibrary::ApplyKnockback(AActor* AvatarActor, const TArray<AActor*>& HitActors, float InnerRadius,
+	float OuterRadius, float LaunchForceMagnitude, float RotationAngle, bool bDrawDebugs)
+{
+	for (AActor* HitActor : HitActors)
+	{
+		ACharacter* HitCharacter=Cast<ACharacter>(HitActor);
+		if (!IsValid(HitCharacter)||!IsValid(AvatarActor))return TArray<AActor*>();
+		
+		const FVector HitCharacterLocation=HitCharacter->GetActorLocation();
+		const FVector AvatarActorLocation=AvatarActor->GetActorLocation();
+		const FVector ToHitActor=HitCharacterLocation-AvatarActorLocation;
+		const float Distance=FVector::Dist(AvatarActorLocation,HitCharacterLocation);
+		
+		float LaunchForce=0.f;
+		if (Distance>OuterRadius)continue;
+		if (Distance<=InnerRadius)
+		{
+			LaunchForce=LaunchForceMagnitude;
+		}
+		else
+		{
+			const FVector2D FalloffRange(InnerRadius,OuterRadius);//input range
+			const FVector2D LaunchForceRange(LaunchForceMagnitude,0.f);//output range
+			LaunchForce= FMath::GetMappedRangeValueClamped(FalloffRange,LaunchForceRange,Distance);
+		}
+		if (bDrawDebugs)GEngine->AddOnScreenDebugMessage(-1,3.f,FColor::Red,FString::Printf(TEXT("LaunchForce:%f"),LaunchForce));
+		
+		FVector KnockbackForce=ToHitActor.GetSafeNormal();
+		KnockbackForce.Z=0.f;
+		
+		const FVector Right=KnockbackForce.RotateAngleAxis(90.f,FVector::UpVector);
+		KnockbackForce=KnockbackForce.RotateAngleAxis(-RotationAngle,Right);
+		if (bDrawDebugs)
+		{
+			UWorld* World = GEngine->GetWorldFromContextObject(AvatarActor, EGetWorldErrorMode::LogAndReturnNull);
+			DrawDebugDirectionalArrow(World,HitCharacterLocation,HitCharacterLocation+KnockbackForce,100.f,FColor::Green,false,3.f);
+		}
+		
+		HitCharacter->LaunchCharacter(KnockbackForce,true,true);
+		
+	}
+	return HitActors;
 }
