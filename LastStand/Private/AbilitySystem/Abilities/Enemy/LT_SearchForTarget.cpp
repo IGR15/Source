@@ -61,7 +61,8 @@ inline void ULT_SearchForTarget::EndAttackEventReceived(FGameplayEventData Paylo
 void ULT_SearchForTarget::Search()
 {
 	const FVector SearchOrigen=GetAvatarActorFromActorInfo()->GetActorLocation();
-	FClosestActorWithTagResult ClosestActorWithResult= ULT_BluePrintLibrary::FindClosestActorWithTag(this,SearchOrigen,LaststandTags::Player);
+	if (!OwningEnemy.IsValid())return;
+	FClosestActorWithTagResult ClosestActorWithResult= ULT_BluePrintLibrary::FindClosestActorWithTag(GetAvatarActorFromActorInfo(),SearchOrigen,LaststandTags::Player,OwningEnemy->SearchRange);
 
 	TargetBaseCharacter=Cast<ALT_BaseCharacter>(ClosestActorWithResult.Actor);
 	if(!TargetBaseCharacter.IsValid())

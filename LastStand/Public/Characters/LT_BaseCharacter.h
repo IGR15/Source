@@ -53,6 +53,9 @@ public:
 	
 	virtual  void StopMovementUntilLanded();
 	
+	UPROPERTY(EditAnywhere,category="AI")
+	float SearchRange=1000.f;
+	
 protected:
 	void GiveStartUpAbilities();
 	void InitializeAttributes();
