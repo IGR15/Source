@@ -74,17 +74,25 @@ FClosestActorWithTagResult ULT_BluePrintLibrary::FindClosestActorWithTag(const U
 }
 
 void ULT_BluePrintLibrary::SendDamageEventToPlayer(AActor* Target, const TSubclassOf<UGameplayEffect>& DamageEffect,
-	FGameplayEventData& Payload, const FGameplayTag& DataTag, float Damage,UObject* OptionalParticleSystem)
+	FGameplayEventData& Payload, const FGameplayTag& DataTag, float Damage,const FGameplayTag& EventTagOverride,UObject* OptionalParticleSystem)
 {
 	ALT_BaseCharacter* PlayerCharacter=Cast<ALT_BaseCharacter>(Target);
 	if (!IsValid(PlayerCharacter)|| !PlayerCharacter->IsAlive())return;
 
-	ULT_AttributeSet* AttributeSet=Cast<ULT_AttributeSet>(PlayerCharacter->GetAttributeSet());
-	if (!IsValid(AttributeSet))return;
 
-	const bool bLethal=AttributeSet->GetHealth()-Damage<=0.f;
-	const FGameplayTag EventTag=bLethal ? LTTags::Events::Player::Death:LTTags::Events::Player::HitReact;
-
+	
+	FGameplayTag EventTag;
+	if (!EventTagOverride.MatchesTagExact(LTTags::None))
+	{
+		EventTag=EventTagOverride;
+	}
+	else
+	{
+		ULT_AttributeSet* AttributeSet=Cast<ULT_AttributeSet>(PlayerCharacter->GetAttributeSet());
+		if (!IsValid(AttributeSet))return;
+		const bool bLethal=AttributeSet->GetHealth()-Damage<=0.f;
+		EventTag=bLethal ? LTTags::Events::Player::Death:LTTags::Events::Player::HitReact;
+	}
 	Payload.OptionalObject=OptionalParticleSystem;
 	
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(PlayerCharacter,EventTag,Payload);
@@ -101,8 +109,18 @@ void ULT_BluePrintLibrary::SendDamageEventToPlayer(AActor* Target, const TSubcla
 	
 }
 
+void ULT_BluePrintLibrary::SendDamageEventToPlayers(TArray<AActor*> Targets,
+	const TSubclassOf<UGameplayEffect>& DamageEffect, FGameplayEventData& Payload, const FGameplayTag& DataTag,
+	float Damage, const FGameplayTag& EventTagOverride, UObject* OptionalParticleSystem)
+{
+	for (AActor* Target : Targets)
+	{
+		SendDamageEventToPlayer(Target,DamageEffect,Payload,DataTag,Damage,EventTagOverride,OptionalParticleSystem);
+	}
+}
+
 TArray<AActor*> ULT_BluePrintLibrary::HitBoxOverlapTest(AActor* AvatarActor,float HitBoxRadius,float HitBoxForwardOffset,
-	float HitBoxElevationOffset,bool bDrawDebugs)
+                                                        float HitBoxElevationOffset,bool bDrawDebugs)
 {
 	if (!IsValid(AvatarActor))return TArray<AActor*>();
 	

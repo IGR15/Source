@@ -2,6 +2,7 @@
 
 namespace LTTags
 {
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(None,"LTTags.None","None")
 	namespace SetByCaller
 	{
 		UE_DEFINE_GAMEPLAY_TAG_COMMENT(Projectile,"LTTags.SetByCaller.Projectile","Tag For set by caller magnitude class")
