@@ -34,7 +34,7 @@ void ALT_Projectile::NotifyActorBeginOverlap(AActor* OtherActor)
 	Payload.Instigator=GetOwner();
 	Payload.Target=PlayerCharacter;
 
-	ULT_BluePrintLibrary::SendDamageEventToPlayer(PlayerCharacter,DamageEffect,Payload,LTTags::SetByCaller::Projectile,Damage);
+	ULT_BluePrintLibrary::SendDamageEventToPlayer(PlayerCharacter,DamageEffect,Payload,LTTags::SetByCaller::Projectile,Damage,LTTags::None);
 	
 	/*FGameplayEffectContextHandle ContextHandle= AbilitySystemComponent->MakeEffectContext();
 	FGameplayEffectSpecHandle SpecHandle=AbilitySystemComponent->MakeOutgoingSpec(DamageEffect,1.f,ContextHandle);
